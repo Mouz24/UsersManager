@@ -6,7 +6,6 @@ import RegistrationForm from './RegistrationForm';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import { ThemeProvider } from '@mui/material/styles';
 import LogoutButton from './LogOut';
 
 const CenteredContainer = styled(Container)({

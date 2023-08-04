@@ -3,13 +3,8 @@ import axiosInstance from './AxiosInstance';
 import { Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import UserToolbar from './Toolbar';
 import { useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { visuallyHidden } from '@mui/utils';
-import { useMediaQuery } from '@mui/material';
 
 interface User {
   id: number;

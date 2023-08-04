@@ -1,5 +1,5 @@
-import axios, { AxiosError, AxiosResponse, isAxiosError } from 'axios';
-import React, { useEffect, useState } from 'react';
+import { isAxiosError } from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from './AxiosInstance'
 import { Box, Button, TextField } from '@mui/material';
@@ -58,12 +58,10 @@ const RegistrationForm: React.FC = () => {
               console.error('Error registration:', responseData.DuplicateUserName[0]);
               setUsernameError(responseData.DuplicateUserName[0]);
               setEmailError('');
-              // setFormData((prevFormData) => ({ ...prevFormData, error: responseData.DuplicateUserName[0] }));
             } else if (responseData.DuplicateEmail && responseData.DuplicateEmail.length > 0) {
               console.error('Error registration:', responseData.DuplicateEmail[0]);
               setEmailError(responseData.DuplicateEmail[0]);
               setUsernameError('');
-              // setFormData((prevFormData) => ({ ...prevFormData, error: responseData.DuplicateEmail[0] }));
             }
           } 
         } else {

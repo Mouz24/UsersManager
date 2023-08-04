@@ -1,10 +1,9 @@
-import axios, { AxiosError } from 'axios';
-import React, { useContext, useState } from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from './AxiosInstance'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 interface LoginFormProps {
@@ -36,14 +35,6 @@ const LoginForm: React.FC<LoginFormProps> = ({setIsAuthenticated}) => {
       ...prevFormData,
       [name]: value,
       error: '',
-    }));
-  };
-
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    const { name } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      error: name === 'username' || name === 'password' ? '' : prevFormData.error,
     }));
   };
 

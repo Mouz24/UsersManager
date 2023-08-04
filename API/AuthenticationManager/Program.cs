@@ -59,14 +59,6 @@ builder.Services.AddAuthentication(opt => {
     };
 });
 
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-//        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-//        .RequireAuthenticatedUser()
-//        .Build());
-//});
-
 var app = builder.Build();
 
 app.UseCors(builder => builder

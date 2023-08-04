@@ -19,23 +19,19 @@ const instance = axios.create({
 
 let isRefreshing = false;
 let refreshSubscribers: ((accessToken: string) => void)[] = [];
-let failedRequestQueue: AxiosRequestConfig[] = [];
 
-// Function to add new subscribers waiting for the new access token
 const subscribeTokenRefresh = (cb: (accessToken: string) => void) => {
   refreshSubscribers.push(cb);
 };
-// Function to handle token refreshing
+
 const onRrefreshed = (accessToken: string, refreshToken: string) => {
   refreshSubscribers.forEach((cb) => cb(accessToken));
   refreshSubscribers = [];
 
-  // Update the access token and refresh token in local storage
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('refreshToken', refreshToken);
 };
 
-// Function to refresh the access token using the 'refresh' method
 const refreshAccessToken = async (): Promise<string | null> => {
   try {
     const refreshToken = localStorage.getItem('refreshToken');
@@ -55,14 +51,13 @@ const refreshAccessToken = async (): Promise<string | null> => {
     onRrefreshed(newAccessToken, newRefreshToken);
 
     return newAccessToken;
-  } catch (error: any) { // Use AxiosError as the type for the error variable
+  } catch (error: any) {
     console.error('Error refreshing access token:', error);
 
-    // Check if the error response indicates an expired refresh token
     if (error.response?.status === 400 && error.response?.data === 'Invalid client request') {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      window.location.href = '/login'; // Redirect to the login page when the refresh token is expired
+      window.location.href = '/login';
       return null;
     }
 
@@ -71,7 +66,6 @@ const refreshAccessToken = async (): Promise<string | null> => {
   }
 };
 
-// Request interceptor to add authorization headers (access token) to every request
 instance.interceptors.request.use(
   (config): AdaptAxiosRequestConfig => {
     const accessToken = localStorage.getItem('accessToken');

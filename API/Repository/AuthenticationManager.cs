@@ -112,7 +112,7 @@ namespace Repository
 
         private SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings").GetSection("SECRET").Value/*Environment.GetEnvironmentVariable("SECRET")*/);
+            var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings").GetSection("SECRET").Value);
 
             var secret = new SymmetricSecurityKey(key);
 

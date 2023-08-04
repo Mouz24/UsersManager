@@ -48,8 +48,6 @@ namespace AuthenticationManager.Controllers
 
             await _authManager.AddUserRegistrationDate(userForRegistration);
 
-            //await _emailSender.SendEmailAsync(new Message(userForRegistration.Email, "Registration", $"Welcome, {userForRegistration.UserName}"));
-
             await _repository.SaveAsync();
 
             return StatusCode(201);
