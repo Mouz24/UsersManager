@@ -14,7 +14,7 @@ interface RefreshErrorResponse {
 }
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5295/api/',
+  baseURL: 'http://mouz.peabody28.com/api/',
 });
 
 let isRefreshing = false;
@@ -23,6 +23,7 @@ let refreshSubscribers: ((accessToken: string) => void)[] = [];
 const subscribeTokenRefresh = (cb: (accessToken: string) => void) => {
   refreshSubscribers.push(cb);
 };
+
 
 const onRrefreshed = (accessToken: string, refreshToken: string) => {
   refreshSubscribers.forEach((cb) => cb(accessToken));
@@ -43,7 +44,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
 
     isRefreshing = true;
 
-    const response = await axios.post(`http://localhost:5295/api/token/refresh`, { accessToken , refreshToken } );
+    const response = await axios.post(`http://mouz.peabody28.com/token/refresh`, { accessToken , refreshToken } );
     const newAccessToken = response.data.accessToken;
     const newRefreshToken = response.data.refreshToken;
 

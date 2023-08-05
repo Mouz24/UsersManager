@@ -7,6 +7,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import LogoutButton from './LogOut';
+import { HashRouter } from "react-router-dom";
 
 const CenteredContainer = styled(Container)({
   display: 'flex',
@@ -38,7 +39,7 @@ const App: React.FC = () => {
   const username = localStorage.getItem('username');
 
   return (
-    <Router>
+    <HashRouter>
       {!isAuthenticated && (
         <CenteredContainer>
           <div>
@@ -76,7 +77,7 @@ const App: React.FC = () => {
           </Routes>
           </Container>
       )}
-    </Router>
+    </HashRouter>
   );
 };
 

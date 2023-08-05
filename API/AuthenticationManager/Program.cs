@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
 var jwtSettings = configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings.GetSection("SECRET").Value;
+var secretKey = Environment.GetEnvironmentVariable("SECRET");
 
 builder.Services.AddControllers();
 

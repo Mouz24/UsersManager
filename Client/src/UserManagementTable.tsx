@@ -21,6 +21,7 @@ const UserManagementTable: React.FC = () => {
   const accessToken = localStorage.getItem('accessToken');
   const username = localStorage.getItem('username');
   const navigate = useNavigate();
+  const LoggedInUser = users.find((user) => user.username === username);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -34,10 +35,6 @@ const UserManagementTable: React.FC = () => {
     setPage(0);
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   useEffect(() => {}, [selectedUserIds]);
 
   const fetchUsers = async () => {
@@ -49,63 +46,69 @@ const UserManagementTable: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    fetchUsers();
+  }, [users]);
+
   const handleLogout = async () => {
-    await axiosInstance.post('token/revoke',
-    { accessToken },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('username');
+    localStorage.clear();
     navigate('/');
     window.location.reload();
   };
 
   const toggleUserBlockStatus = async (isBlocked: boolean) => {
     try {
-        await axiosInstance.put(`users/block`, selectedUserIds);
-       fetchUsers();
-       const loggedInUserId = getUserId();
-       if (loggedInUserId !== undefined && selectedUserIds.includes(loggedInUserId)) {
+      const loggedInUser = users.find((user) => user.username === username);
+      if (!loggedInUser || loggedInUser.isBlocked)
+      {
         handleLogout();
       } else {
-        setSelectedUserIds([]);
-      }
-    } catch (error) {
-      console.error('Error updating user block status:', error);
+        await axiosInstance.put(`users/block`, selectedUserIds);
+        
+        const loggedInUserId = getUserId();
+        if (loggedInUserId !== undefined && selectedUserIds.includes(loggedInUserId)) {
+        handleLogout();
+        } else {
+          setSelectedUserIds([]);
+        }
+      }} catch (error) {
+        console.error('Error updating user block status:', error);
     }
   };
 
   const toggleUserUnblockStatus = async (isBlocked: boolean) => {
     try {
+      if (!LoggedInUser || LoggedInUser.isBlocked)
+      {
+        handleLogout();
+      } else {
         await axiosInstance.put(`users/unblock`, selectedUserIds);
-        fetchUsers();
-
         setSelectedUserIds([]);
-      } catch (error) {
-      console.error('Error updating user block status:', error);
+      }} catch (error) {
+        console.error('Error updating user block status:', error);
     }
   };
 
   const toggleUserDeleteStatus = async () => {
     try {
-      const loggedInUserId = getUserId();
-      if (loggedInUserId !== undefined && selectedUserIds.includes(loggedInUserId)) {
+      if (!LoggedInUser || LoggedInUser.isBlocked) {
         handleLogout();
       } else {
-        setSelectedUserIds([]);
+        const loggedInUserId = getUserId();
+        if (loggedInUserId !== undefined && selectedUserIds.includes(loggedInUserId)) {
+          handleLogout();
+        } else {
+          await axiosInstance.delete(`users/delete`, {
+            data: selectedUserIds,
+          });
+
+          const updatedUsers = users.filter((user) => !selectedUserIds.includes(user.id));
+          setUsers(updatedUsers);
+          setSelectedUserIds([]);
+        }
       }
-
-      await axiosInstance.delete(`users/delete`, {
-        data: selectedUserIds
-      });
-
       fetchUsers();
-      } catch (error) {
+    } catch (error) {
       console.error('Error updating user delete status:', error);
     }
   };
